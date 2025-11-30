@@ -51,7 +51,7 @@ export const Experience = () => {
                     initial={{ opacity: 0 }} animate={{ opacity: 1 }}
                     className="text-xs text-[#ff00ff] mt-2 font-bold animate-pulse"
                 >
-                    {isRecruiterMode ? "🥺 HIRE ME" : "🚩 GO AWAY"}
+                    {isRecruiterMode ? "✨ 10x DEVELOPER" : "🐛 WORKS ON MY MACHINE"}               
                 </motion.p>
             </div>
 

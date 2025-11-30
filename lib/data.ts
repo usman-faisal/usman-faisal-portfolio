@@ -2,7 +2,7 @@ export const EXPERIENCE = [
     {
         company: "Heyoz",
         role: "Associate Software Engineer",
-        period: "Oct 2024 -- Present",
+        period: "Nov 2025 -- Present",
         recruiter: "Building 'Cursor for marketing' an AI-driven platform revolutionizing content workflows. Developing realistic avatar generation engines, optimizing Next.js performance, and collaborating remotely to ship critical product features.",
         honest: "Literally building Cursor but for marketing managers. I write code that creates AI avatars so realistic they have better skincare routines than me. If the AI takes over the world, I'm the guy who gave it the API keys. We ball.",
         stack: ["Next.js", "AI/LLMs"],
@@ -11,7 +11,7 @@ export const EXPERIENCE = [
     {
         company: "Sportefy",
         role: "Lead Backend Developer",
-        period: "July 2024 -- Present",
+        period: "July 2025 -- Oct 2025",
         recruiter: "Founding engineer responsible for the entire backend architecture. Designed scalable PostgreSQL schemas, implemented complex matchmaking algorithms, and managed Supabase automation for a live production environment.",
         honest: "Title says 'Lead', reality says 'Only'. I am the entire IT department. I wrote a matchmaking algorithm complex enough to find me a soulmate (it was using basic filtering), but I used it to help people find sport partners instead.",
         stack: ["NestJS", "Postgres", "Supabase"],

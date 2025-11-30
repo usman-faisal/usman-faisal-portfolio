@@ -24,3 +24,35 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@layer components {
+  .brutalist-btn {
+    @apply px-6 py-3 font-bold uppercase tracking-wider border-2 border-black transition-all duration-100;
+
+    /* arbitrary values must be written in raw CSS */
+    box-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 1);
+  }
+
+  .brutalist-btn:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px 0px rgba(255, 255, 255, 1);
+  }
+}
+
+/* Custom Scrollbar for extra flair */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border: 1px solid #00ff41;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00ff41;
+}

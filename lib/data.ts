@@ -1,14 +1,5 @@
 export const EXPERIENCE = [
     {
-        company: "Heyoz",
-        role: "Associate Software Engineer",
-        period: "Nov 2025 -- Present",
-        recruiter: "Building 'Cursor for marketing' an AI-driven platform revolutionizing content workflows. Developing realistic avatar generation engines, optimizing Next.js performance, and collaborating remotely to ship critical product features.",
-        honest: "Literally building Cursor but for marketing managers. I write code that creates AI avatars so realistic they have better skincare routines than me. If the AI takes over the world, I'm the guy who gave it the API keys. We ball.",
-        stack: ["Next.js", "AI/LLMs"],
-        link: "https://heyoz.com",
-    },
-    {
         company: "Sportefy",
         role: "Founding Backend Developer",
         period: "July 2025 -- Oct 2025",

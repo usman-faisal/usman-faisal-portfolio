@@ -10,10 +10,10 @@ export const EXPERIENCE = [
     },
     {
         company: "Sportefy",
-        role: "Lead Backend Developer",
+        role: "Founding Backend Developer",
         period: "July 2025 -- Oct 2025",
         recruiter: "Founding engineer responsible for the entire backend architecture. Designed scalable PostgreSQL schemas, implemented complex matchmaking algorithms, and managed Supabase automation for a live production environment.",
-        honest: "Title says 'Lead', reality says 'Only'. I am the entire IT department. I wrote a matchmaking algorithm complex enough to find me a soulmate (it was using basic filtering), but I used it to help people find sport partners instead.",
+        honest: "I am the entire IT department. I wrote a matchmaking algorithm complex enough to find me a soulmate (it was using basic filtering), but I used it to help people find sport partners instead.",
         stack: ["NestJS", "Postgres", "Supabase"],
         link: "https://play.google.com/store/apps/details?id=com.sportefypakistan.app",
     },
@@ -29,6 +29,12 @@ export const EXPERIENCE = [
 ];
 
 export const PROJECTS = [
+    {
+        title: "HeyOz",
+        desc: "Contributed to building Cursor but for marketing managers. I write code that creates AI avatars so realistic they have better skincare routines than me. If the AI takes over the world, I'm the guy who gave it the API keys. We ball.",
+        link: "https://heyoz.com",
+        tag: "Cursor for marketing",
+    },
     {
         title: "API Flow",
         desc: "Uses Gemini to turn English commands into multi-step API workflows. I was too lazy to open Postman, so I spent 3 weeks building an AI to do it for me. 16 stars on GitHub, My mom is so proud 🥺.",

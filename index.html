@@ -52,7 +52,28 @@
     }
 
     html {
-      scroll-behavior: smooth;
+      /* Lenis recommends disabling native smooth scroll when using their library */
+      scroll-behavior: initial !important;
+    }
+
+    html.lenis, html.lenis body {
+      height: auto;
+    }
+
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+
+    .lenis.lenis-smooth [data-lenis-prevent] {
+      overscroll-behavior: contain;
+    }
+
+    .lenis.lenis-stopped {
+      overflow: hidden;
+    }
+
+    .lenis.lenis-scrolling iframe {
+      pointer-events: none;
     }
 
     body {
@@ -209,6 +230,7 @@
     section {
       padding: var(--space-24) 0;
       position: relative;
+      scroll-margin-top: var(--space-24);
     }
 
     .section-header {
@@ -793,6 +815,8 @@
     <div>© 2026 Muhammad Usman Shamsi</div>
   </footer>
 
+  <!-- Lenis CDN -->
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
   <script>
     // Solid boundary top navigation background on scroll
     const nav = document.getElementById('nav');
@@ -900,11 +924,41 @@
         el.style.transition = `none`;
       });
     });
-  </script>
-</body>
-</html>
-eenter', () => {
-        el.style.transition = `none`;
+
+    // ── Lenis Smooth Scroll Initialization ──
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      direction: 'vertical',
+      gestureDirection: 'vertical',
+      smooth: true,
+      mouseMultiplier: 1,
+      smoothTouch: false,
+      touchMultiplier: 2,
+      infinite: false,
+    });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    // Handle anchor links with Lenis
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          e.preventDefault();
+          lenis.scrollTo(targetElement, {
+            offset: -100, // Accounts for the navigation header
+            duration: 1.5,
+          });
+          history.pushState(null, null, targetId);
+        }
       });
     });
   </script>

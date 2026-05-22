@@ -107,7 +107,7 @@
       pointer-events: none;
       transform: translate(-50%, -50%);
       z-index: 10000;
-      transition: width 0.2s, height 0.2s, background-color 0.2s;
+      transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
     }
     .cursor-dot {
       width: 8px; height: 8px;
@@ -116,9 +116,18 @@
     .cursor-outline {
       width: 40px; height: 40px;
       border: 1px solid var(--primary);
-      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.1s;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.1s, background-color 0.2s, border-color 0.2s;
     }
     body:hover .cursor-dot { opacity: 1; }
+
+    /* Invert cursor on dark cards */
+    body.cursor-hover-card .cursor-dot {
+      background: var(--surface);
+    }
+    body.cursor-hover-card .cursor-outline {
+      border-color: var(--surface) !important;
+      background-color: rgba(255, 255, 255, 0.1) !important;
+    }
 
     /* ── NAVIGATION ───────────────────────────────────────── */
     nav {
@@ -857,6 +866,12 @@
     // ── Ink Bleed Origin Tracking on Cards ──
     const cards = document.querySelectorAll('.paper-card');
     cards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        document.body.classList.add('cursor-hover-card');
+      });
+      card.addEventListener('mouseleave', () => {
+        document.body.classList.remove('cursor-hover-card');
+      });
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -882,6 +897,13 @@
         el.style.transition = `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)`;
       });
       el.addEventListener('mouseenter', () => {
+        el.style.transition = `none`;
+      });
+    });
+  </script>
+</body>
+</html>
+eenter', () => {
         el.style.transition = `none`;
       });
     });

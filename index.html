@@ -1,966 +1,115 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Muhammad Usman Shamsi — Full-Stack & AI Engineer</title>
-
-  <!-- Preconnect to Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <!-- Paper Design System Fonts: Montserrat (Display), Roboto (Primary), PT Mono (Mono) -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=PT+Mono&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
-  <style>
-    /* ── DESIGN TOKENS ────────────────────────────────────── */
-    :root {
-      /* Colors */
-      --primary: #111111;
-      --secondary: #8B5CF6;
-      --success: #16A34A;
-      --warning: #D97706;
-      --danger: #DC2626;
-      --surface: #FFFFFF;
-      --surface-alt: #F3F4F6;
-      --text: #111827;
-      --text-muted: #4B5563;
-
-      /* Typography */
-      --font-display: 'Montserrat', sans-serif;
-      --font-primary: 'Roboto', sans-serif;
-      --font-mono: 'PT Mono', monospace;
-
-      /* Spacing Scale (4/8/12/16/24/32/etc) */
-      --space-1: 0.25rem; /* 4px */
-      --space-2: 0.5rem;  /* 8px */
-      --space-3: 0.75rem; /* 12px */
-      --space-4: 1rem;    /* 16px */
-      --space-6: 1.5rem;  /* 24px */
-      --space-8: 2rem;    /* 32px */
-      --space-12: 3rem;   /* 48px */
-      --space-16: 4rem;   /* 64px */
-      --space-24: 6rem;   /* 96px */
-      --space-32: 8rem;   /* 128px */
-    }
-
-    /* ── FOUNDATIONS ──────────────────────────────────────── */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      /* Lenis recommends disabling native smooth scroll when using their library */
-      scroll-behavior: initial !important;
-    }
-
-    html.lenis, html.lenis body {
-      height: auto;
-    }
-
-    .lenis.lenis-smooth {
-      scroll-behavior: auto !important;
-    }
-
-    .lenis.lenis-smooth [data-lenis-prevent] {
-      overscroll-behavior: contain;
-    }
-
-    .lenis.lenis-stopped {
-      overflow: hidden;
-    }
-
-    .lenis.lenis-scrolling iframe {
-      pointer-events: none;
-    }
-
-    body {
-      background-color: var(--surface);
-      color: var(--text);
-      font-family: var(--font-primary);
-      font-weight: 400;
-      font-size: 16px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      overflow-x: hidden;
-      position: relative;
-      cursor: none; /* Added for custom cursor */
-    }
-
-    /* Tactile Paper Grain Overlay */
-    body::after {
-      content: '';
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.25;
-      background-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)"/%3E%3C/svg%3E');
-    }
-
-    /* Print-inspired Selection */
-    ::selection {
-      background: var(--primary);
-      color: var(--surface);
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-      font-family: var(--font-display);
-      font-weight: 800;
-      color: var(--primary);
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-    }
-
-    a {
-      color: var(--primary);
-      text-decoration: none;
-    }
-
-    /* ── CUSTOM CURSOR ────────────────────────────────────── */
-    .cursor-dot, .cursor-outline {
-      position: fixed;
-      top: 0; left: 0;
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      z-index: 10000;
-      transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
-    }
-    .cursor-dot {
-      width: 8px; height: 8px;
-      background: var(--primary);
-    }
-    .cursor-outline {
-      width: 40px; height: 40px;
-      border: 1px solid var(--primary);
-      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.1s, background-color 0.2s, border-color 0.2s;
-    }
-    body:hover .cursor-dot { opacity: 1; }
-
-    /* Invert cursor on dark cards */
-    body.cursor-hover-card .cursor-dot {
-      background: var(--surface);
-    }
-    body.cursor-hover-card .cursor-outline {
-      border-color: var(--surface) !important;
-      background-color: rgba(255, 255, 255, 0.1) !important;
-    }
-
-    /* ── NAVIGATION ───────────────────────────────────────── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--space-6) var(--space-8);
-      background: var(--surface);
-      border-bottom: 2px solid transparent;
-      transition: border-bottom-color 0.3s ease, padding 0.3s ease;
-    }
-
-    nav.scrolled {
-      padding: var(--space-4) var(--space-8);
-      border-bottom-color: var(--primary);
-    }
-
-    .nav-mark {
-      font-family: var(--font-display);
-      font-weight: 900;
-      font-size: 1.25rem;
-      text-transform: uppercase;
-      letter-spacing: -0.05em;
-    }
-
-    .nav-mark span {
-      color: var(--secondary);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: var(--space-8);
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      position: relative;
-      display: inline-block;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0%;
-      height: 2px;
-      background: var(--secondary);
-      transition: width 0.3s ease;
-    }
-
-    .nav-links a:hover::after,
-    .nav-links a:focus-visible::after {
-      width: 100%;
-    }
-
-    /* Focus States for Accessibility */
-    *:focus-visible {
-      outline: 3px solid var(--secondary);
-      outline-offset: 2px;
-    }
-
-    /* ── LAYOUT ───────────────────────────────────────────── */
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 var(--space-8);
-    }
-
-    section {
-      padding: var(--space-24) 0;
-      position: relative;
-      scroll-margin-top: var(--space-24);
-    }
-
-    .section-header {
-      border-bottom: 3px solid var(--primary);
-      padding-bottom: var(--space-2);
-      margin-bottom: var(--space-12);
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-    }
-
-    .section-title {
-      font-size: 2.5rem;
-      text-transform: uppercase;
-    }
-
-    .section-meta {
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
-      color: var(--text-muted);
-    }
-
-    /* ── HERO ─────────────────────────────────────────────── */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding-top: var(--space-32);
-    }
-
-    .hero-eyebrow {
-      font-family: var(--font-mono);
-      font-weight: 600;
-      font-size: 0.875rem;
-      color: var(--secondary);
-      margin-bottom: var(--space-6);
-      text-transform: uppercase;
-    }
-
-    .hero-title {
-      font-size: clamp(3rem, 8vw, 6rem);
-      margin-bottom: var(--space-6);
-      text-transform: uppercase;
-    }
-
-    .hero-subtitle {
-      font-size: 1.5rem;
-      color: var(--text-muted);
-      max-width: 600px;
-      margin-bottom: var(--space-12);
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: var(--space-6);
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-2);
-      padding: var(--space-3) var(--space-6);
-      font-family: var(--font-mono);
-      font-weight: 700;
-      font-size: 0.875rem;
-      text-transform: uppercase;
-      border: 2px solid var(--primary);
-      background: var(--surface);
-      color: var(--primary);
-      cursor: pointer;
-      box-shadow: 4px 4px 0px var(--primary);
-      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.2s ease;
-    }
-
-    .btn:hover, .btn:focus-visible {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0px var(--secondary);
-      background: var(--surface-alt);
-    }
-
-    .btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0px var(--primary);
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: var(--surface);
-    }
-
-    .btn-primary:hover, .btn-primary:focus-visible {
-      background: var(--text);
-      color: var(--surface);
-    }
-
-    /* ── GRID EXPERIENCES & PROJECTS ──────────────────────── */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-8);
-    }
-
-    /* Paper Tactile Cards */
-    .paper-card {
-      background: var(--surface);
-      border: 2px solid var(--primary);
-      padding: var(--space-8);
-      position: relative;
-      box-shadow: 8px 8px 0px var(--primary);
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden; /* Added for ink bleed effect */
-    }
-
-    /* Ensure content sits above the ink bleed pseudo-element */
-    .paper-card > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Ink Bleed Origin Effect */
-    .paper-card::before {
-      content: '';
-      position: absolute;
-      top: var(--y, 50%);
-      left: var(--x, 50%);
-      width: 0;
-      height: 0;
-      background: var(--primary);
-      border-radius: 50%;
-      transform: translate(-50%, -50%);
-      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1), height 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 0;
-    }
-
-    /* Interactive hover for links wrapping cards */
-    a.paper-card {
-      color: inherit;
-    }
-
-    a.paper-card:hover, a.paper-card:focus-visible,
-    .paper-card:hover {
-      transform: translate(-4px, -4px);
-      box-shadow: 12px 12px 0px var(--secondary);
-      color: var(--surface);
-    }
-
-    a.paper-card:hover::before, a.paper-card:focus-visible::before,
-    .paper-card:hover::before {
-      width: 250%;
-      height: 250%;
-    }
-
-    /* Adjust children color on hover so they don't blend into the dark background */
-    a.paper-card:hover .card-meta, a.paper-card:hover .card-subtitle, a.paper-card:hover .card-desc,
-    .paper-card:hover .card-meta, .paper-card:hover .card-subtitle, .paper-card:hover .card-desc, .paper-card:hover .card-title {
-      color: var(--surface);
-      border-color: var(--surface);
-    }
-
-    a.paper-card:hover .tag, .paper-card:hover .tag {
-      border-color: var(--surface);
-      background: transparent;
-      color: var(--surface);
-    }
-
-    .card-meta {
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: var(--space-4);
-      border-bottom: 1px solid var(--primary);
-      padding-bottom: var(--space-2);
-      transition: color 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .card-title {
-      font-size: 1.5rem;
-      margin-bottom: var(--space-2);
-    }
-
-    .card-subtitle {
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
-      color: var(--secondary);
-      font-weight: 600;
-      margin-bottom: var(--space-4);
-      transition: color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .card-desc {
-      color: var(--text-muted);
-      margin-bottom: var(--space-6);
-      flex-grow: 1;
-      transition: color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--space-2);
-      margin-top: auto;
-    }
-
-    .tag {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      padding: var(--space-1) var(--space-2);
-      border: 1px solid var(--primary);
-      background: var(--surface-alt);
-      font-weight: 600;
-      transition: color 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* ── ABOUT / SKILLS ───────────────────────────────────── */
-    .about-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-16);
-    }
-
-    .about-copy p {
-      font-size: 1.125rem;
-      margin-bottom: var(--space-4);
-    }
-
-    .skill-block {
-      margin-bottom: var(--space-6);
-    }
-
-    .skill-block h4 {
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
-      text-transform: uppercase;
-      margin-bottom: var(--space-3);
-      padding-bottom: var(--space-1);
-      border-bottom: 2px dashed var(--primary);
-    }
-
-    /* ── COMPLEX ANIMATIONS (PAPER UNFOLD) ────────────────── */
-    .unfold-item {
-      opacity: 0;
-      transform-origin: top center;
-      transform: perspective(1000px) rotateX(-90deg) translateY(-20px);
-      transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
-                  transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-
-    .unfold-item.is-visible {
-      opacity: 1;
-      transform: perspective(1000px) rotateX(0deg) translateY(0);
-    }
-
-    /* Slide-up reveal for non-card text */
-    .slide-up {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    }
-
-    .slide-up.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Staggering delays */
-    .delay-1 { transition-delay: 0.1s; }
-    .delay-2 { transition-delay: 0.2s; }
-    .delay-3 { transition-delay: 0.3s; }
-    .delay-4 { transition-delay: 0.4s; }
-
-    /* ── FOOTER ───────────────────────────────────────────── */
-    footer {
-      border-top: 4px solid var(--primary);
-      padding: var(--space-8) 0;
-      margin-top: var(--space-16);
-      display: flex;
-      justify-content: center;
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
-    }
-
-    /* ── RESPONSIVE ───────────────────────────────────────── */
-    @media (max-width: 768px) {
-      .grid-2, .about-layout {
-        grid-template-columns: 1fr;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Muhammad Usman Shamsi</title>
+    <style>
+      body {
+        font-family: monospace;
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+        line-height: 1.6;
+        color: #222;
+        background-color: #fcfcfc;
       }
-
-      .hero-title {
-        font-size: 3rem;
+      h1 {
+        font-size: 1.4rem;
+        font-weight: bold;
+        margin-bottom: 4px;
       }
-
-      .hero-actions {
-        flex-direction: column;
+      h2 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-top: 30px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 4px;
       }
-
-      nav {
-        padding: var(--space-4);
+      p {
+        margin: 12px 0;
       }
-
-      .nav-links {
-        display: none; /* In a real app, replace with a mobile menu toggle */
+      ul {
+        list-style-type: none;
+        padding-left: 0;
       }
-
-      /* Disable Custom Cursor on Mobile */
-      .cursor-dot, .cursor-outline {
-        display: none;
+      li {
+        margin-bottom: 14px;
       }
-      body { cursor: auto; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .unfold-item, .slide-up {
-        transition: none !important;
-        opacity: 1;
-        transform: none;
+      a {
+        color: #0066cc;
+        text-decoration: none;
       }
-    }
-  </style>
-</head>
-<body>
+      a:hover {
+        text-decoration: underline;
+      }
+      .meta {
+        color: #666;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Muhammad Usman Shamsi</h1>
+    <p class="meta">
+      Karachi, Pakistan |
+      <a href="mailto:usman.shamsi987@gmail.com">usman.shamsi987@gmail.com</a>
+    </p>
 
-  <!-- Custom Cursor -->
-  <div class="cursor-dot"></div>
-  <div class="cursor-outline"></div>
+    <p>Somewhere between git push and malloc</p>
 
-  <!-- Navigation -->
-  <nav id="nav">
-    <div class="nav-mark">USM<span>.</span></div>
-    <ul class="nav-links">
-      <li><a href="#about" data-magnetic>About</a></li>
-      <li><a href="#experience" data-magnetic>Experience</a></li>
-      <li><a href="#projects" data-magnetic>Work</a></li>
-      <li><a href="#contact" data-magnetic>Contact</a></li>
+    <p>
+      <a
+        href="https://github.com/usman-faisal"
+        target="_blank"
+        rel="noopener noreferrer"
+        >GitHub</a
+      >
+      &middot;
+      <a
+        href="https://www.linkedin.com/in/muhammad-usman-shamsi-325079286/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >LinkedIn</a
+      >
+    </p>
+
+    <h2>Projects</h2>
+    <ul>
+      <li>
+        <strong><a target="_blank" rel="noopener noreferrer" href="https://github.com/usman-faisal/sqlite-clone-c">C Database</a></strong> — Writing a SQLite clone
+        from scratch in C, implementing B-tree indexing and byte-level memory
+        management.
+      </li>
+      <li>
+        <strong
+          ><a target="_blank" rel="noopener noreferrer" href="https://github.com/usman-faisal/api-flow">API Flow </a> &
+          <a target="_blank" rel="noopener noreferrer" href="https://blisp-landing.vercel.app"
+            >Blisp</a
+          ></strong
+        >
+        — Engineering multi-agent AI systems, voice-first productivity task
+        pipelines, and complex automation layers using LangGraph and Gemini.
+      </li>
+      <li>
+        <strong><a target="_blank" rel="noopener noreferrer" href="https://github.com/ProDanish203/Ligma-DevsDay-26">LIGMA</a></strong> — A real-time collaborative
+        canvas built with CRDTs that took the runner-up spot at the DevsDay 2026
+        hackathon.
+      </li>
     </ul>
-  </nav>
-
-  <main>
-    <!-- Hero Section -->
-    <section class="hero" id="top">
-      <div class="hero-eyebrow slide-up">Systems & Architecture</div>
-      <h1 class="hero-title slide-up delay-1">
-        Muhammad<br>Usman Shamsi.
-      </h1>
-      <p class="hero-subtitle slide-up delay-2">
-        Full-Stack Engineer building high-performance backend infrastructure, agentic AI pipelines, and systems from scratch. Based in Karachi.
-      </p>
-      <div class="hero-actions slide-up delay-3">
-        <a href="#projects" class="btn btn-primary">View Work</a>
-        <a href="https://github.com/usman-faisal" target="_blank" rel="noopener" class="btn">
-          GitHub
-        </a>
-        <a href="https://www.linkedin.com/in/muhammad-usman-shamsi-325079286/" target="_blank" rel="noopener" class="btn">
-          LinkedIn
-        </a>
-      </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about">
-      <div class="section-header slide-up">
-        <h2 class="section-title">01. Profile</h2>
-        <span class="section-meta">SYS_INIT</span>
-      </div>
-
-      <div class="about-layout">
-        <div class="about-copy slide-up delay-1">
-          <p>
-            I engineer solutions with a heavy bias toward backend architecture and low-level systems. I prefer explicit state, strict types, and code that scales reliably under pressure.
-          </p>
-          <p>
-            Currently, I am expanding my foundational knowledge by writing a custom database engine in C (complete with B-Trees and custom disk pagers), while concurrently shipping modern AI agents and real-time coordination tools.
-          </p>
-          <p>
-            I build things that work seamlessly, efficiently, and deliberately.
-          </p>
-        </div>
-
-        <div class="about-skills">
-          <div class="skill-block slide-up delay-2">
-            <h4>Backend & Systems</h4>
-            <div class="tags">
-              <span class="tag">C</span>
-              <span class="tag">NestJS</span>
-              <span class="tag">Node.js</span>
-              <span class="tag">PostgreSQL</span>
-              <span class="tag">Prisma</span>
-              <span class="tag">Redis</span>
-            </div>
-          </div>
-          <div class="skill-block slide-up delay-3">
-            <h4>AI / LLM Engineering</h4>
-            <div class="tags">
-              <span class="tag">LangGraph</span>
-              <span class="tag">LangChain</span>
-              <span class="tag">Agentic Pipelines</span>
-              <span class="tag">Vector DBs</span>
-              <span class="tag">OpenAI / Gemini</span>
-            </div>
-          </div>
-          <div class="skill-block slide-up delay-4">
-            <h4>Frontend</h4>
-            <div class="tags">
-              <span class="tag">TypeScript</span>
-              <span class="tag">React</span>
-              <span class="tag">Next.js</span>
-              <span class="tag">React Native / Expo</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience">
-      <div class="section-header slide-up">
-        <h2 class="section-title">02. Experience</h2>
-        <span class="section-meta">FULL_TIME_ROLES</span>
-      </div>
-
-      <div class="grid-2">
-        <a href="https://heyoz.com" target="_blank" class="paper-card unfold-item delay-1">
-          <div class="card-meta">
-            <span>HeyOz</span>
-            <span>Dec 2025 – Jan 2026</span>
-          </div>
-          <h3 class="card-title">Associate Software Engineer</h3>
-          <p class="card-desc">
-            Contributing to an AI-powered ad creation platform with a focus on generating hyper-realistic AI avatars and improving marketing workflow automations.
-          </p>
-          <div class="tags">
-            <span class="tag">React</span>
-            <span class="tag">AI Avatars</span>
-            <span class="tag">Generative AI</span>
-          </div>
-        </a>
-
-        <a href="https://sportefypakistan.com" target="_blank" class="paper-card unfold-item delay-2">
-          <div class="card-meta">
-            <span>Sportefy (Slidey LLC)</span>
-            <span>Jul 2025 – Oct 2025</span>
-          </div>
-          <h3 class="card-title">Full-Time Backend Engineer</h3>
-          <p class="card-desc">
-            Engineered the backend infrastructure from scratch. Designed and implemented core real-time matchmaking algorithms, venue booking systems, and a secure authentication layer to support high-velocity feature rollouts.
-          </p>
-          <div class="tags">
-            <span class="tag">NestJS</span>
-            <span class="tag">PostgreSQL</span>
-            <span class="tag">Supabase</span>
-            <span class="tag">Redis</span>
-          </div>
-        </a>
-
-        <a href="https://slidey.io" target="_blank" class="paper-card unfold-item delay-3">
-          <div class="card-meta">
-            <span>Slidey LLC</span>
-            <span>Feb 2024 – Sep 2024</span>
-          </div>
-          <h3 class="card-title">Full-Time Software Engineer</h3>
-          <p class="card-desc">
-            Constructed and deployed robust RAG pipelines over client knowledge bases. Managed Azure deployments and established stable CI/CD workflows to ship LangChain-powered production agents.
-          </p>
-          <div class="tags">
-            <span class="tag">RAG Pipelines</span>
-            <span class="tag">Azure</span>
-            <span class="tag">LangChain</span>
-            <span class="tag">CI/CD</span>
-          </div>
-        </a>
-
-      </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects">
-      <div class="section-header slide-up">
-        <h2 class="section-title">03. Selected Work</h2>
-        <span class="section-meta">BUILD_LOG</span>
-      </div>
-
-      <div class="grid-2">
-        <!-- Project 1 -->
-        <a href="https://github.com/usman-faisal/sqlite-clone-c" target="_blank" class="paper-card unfold-item delay-1">
-          <div class="card-meta">
-            <span>Systems</span>
-            <span>In Progress</span>
-          </div>
-          <h3 class="card-title">C-Database Engine</h3>
-          <div class="card-subtitle">Low-Level Implementation</div>
-          <p class="card-desc">
-            Building a relational database engine from scratch in C to deeply understand storage internals. Includes custom B-Tree indexing, a pager for raw disk I/O, and a SQL-like parser.
-          </p>
-          <div class="tags">
-            <span class="tag">C</span>
-            <span class="tag">B-Trees</span>
-            <span class="tag">Disk I/O</span>
-          </div>
-        </a>
-
-        <!-- Project 2 -->
-        <a href="https://github.com/ProDanish203/Ligma-DevsDay-26" target="_blank" class="paper-card unfold-item delay-2">
-          <div class="card-meta">
-            <span>Collaborative Web</span>
-            <span>DevsDay-2026 Runner-Up</span>
-          </div>
-          <h3 class="card-title">LIGMA Canvas</h3>
-          <div class="card-subtitle">Real-time Coordination</div>
-          <p class="card-desc">
-            A high-performance collaborative canvas implementing real-time CRDT-based conflict resolution via Yjs, granular node-level RBAC, and AI-driven task extraction capabilities.
-          </p>
-          <div class="tags">
-            <span class="tag">NestJS</span>
-            <span class="tag">Socket.IO</span>
-            <span class="tag">Yjs</span>
-            <span class="tag">Redis</span>
-          </div>
-        </a>
-
-        <!-- Project 3 -->
-        <a href="https://blisp-landing.vercel.app" target="_blank" class="paper-card unfold-item delay-3">
-          <div class="card-meta">
-            <span>Productivity / AI</span>
-            <span>In Progress</span>
-          </div>
-          <h3 class="card-title">Blisp</h3>
-          <div class="card-subtitle">Voice-First Agent</div>
-          <p class="card-desc">
-            An intelligent application that captures unstructured spoken thoughts and utilizes LLMs to automatically extract, order, and generate actionable daily plans and structured projects.
-          </p>
-          <div class="tags">
-            <span class="tag">NestJS</span>
-            <span class="tag">Expo</span>
-            <span class="tag">OpenAI</span>
-            <span class="tag">BullMQ</span>
-          </div>
-        </a>
-
-        <!-- Project 4 -->
-        <a href="https://github.com/usman-faisal/api-flow" target="_blank" class="paper-card unfold-item delay-4">
-          <div class="card-meta">
-            <span>Agentic Orchestration</span>
-            <span>17 ★ GitHub</span>
-          </div>
-          <h3 class="card-title">API Flow</h3>
-          <div class="card-subtitle">Natural Language Compiling</div>
-          <p class="card-desc">
-            A tool that converts natural-language prompts into orchestrated multi-step API workflows. Utilizes LangGraph agents to dynamically plan and execute service calls based on user intent.
-          </p>
-          <div class="tags">
-            <span class="tag">LangGraph</span>
-            <span class="tag">FastAPI</span>
-            <span class="tag">Next.js</span>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-      <div class="section-header slide-up">
-        <h2 class="section-title">04. Contact</h2>
-        <span class="section-meta">COMM_LINK</span>
-      </div>
-      <div class="slide-up delay-1">
-        <p style="font-size: 1.5rem; margin-bottom: var(--space-6); max-width: 600px;">
-          Available for technical discussions, architecture consulting, and compelling full-time opportunities.
-        </p>
-        <a href="mailto:usman.shamsi987@gmail.com" class="btn btn-primary" style="font-size: 1.25rem;">
-          usman.shamsi987@gmail.com
-        </a>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div>© 2026 Muhammad Usman Shamsi</div>
-  </footer>
-
-  <!-- Lenis CDN -->
-  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
-  <script>
-    // Solid boundary top navigation background on scroll
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 10) nav.classList.add('scrolled');
-      else nav.classList.remove('scrolled');
-    }, { passive: true });
-
-    // Intersection Observer for tactile unfold and slide-up animations
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -10% 0px',
-      threshold: 0.1
-    };
-
-    const animateOnScroll = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, observerOptions);
-
-    // Attach observer to elements
-    document.querySelectorAll('.unfold-item, .slide-up').forEach(el => {
-      animateOnScroll.observe(el);
-    });
-
-    // ── Custom Cursor Logic ──
-    const dot = document.querySelector('.cursor-dot');
-    const outline = document.querySelector('.cursor-outline');
-    let mouseX = 0, mouseY = 0;
-    let outlineX = 0, outlineY = 0;
-
-    window.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      if(dot) dot.style.transform = `translate(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%))`;
-    });
-
-    function animateCursor() {
-      let dx = mouseX - outlineX;
-      let dy = mouseY - outlineY;
-      outlineX += dx * 0.2;
-      outlineY += dy * 0.2;
-      if(outline) outline.style.transform = `translate(calc(${outlineX}px - 50%), calc(${outlineY}px - 50%))`;
-      requestAnimationFrame(animateCursor);
-    }
-    requestAnimationFrame(animateCursor);
-
-    // Enlarge cursor on interactive elements
-    const interactives = document.querySelectorAll('a, button, [data-magnetic]');
-    interactives.forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        if(outline) {
-          outline.style.width = '60px';
-          outline.style.height = '60px';
-          outline.style.backgroundColor = 'rgba(17,17,17,0.1)';
-        }
-      });
-      el.addEventListener('mouseleave', () => {
-        if(outline) {
-          outline.style.width = '40px';
-          outline.style.height = '40px';
-          outline.style.backgroundColor = 'transparent';
-        }
-      });
-    });
-
-    // ── Ink Bleed Origin Tracking on Cards ──
-    const cards = document.querySelectorAll('.paper-card');
-    cards.forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        document.body.classList.add('cursor-hover-card');
-      });
-      card.addEventListener('mouseleave', () => {
-        document.body.classList.remove('cursor-hover-card');
-      });
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--x', `${x}px`);
-        card.style.setProperty('--y', `${y}px`);
-      });
-    });
-
-    // ── Magnetic Hover Effect ──
-    const magnetics = document.querySelectorAll('[data-magnetic]');
-    magnetics.forEach(el => {
-      el.addEventListener('mousemove', (e) => {
-        const rect = el.getBoundingClientRect();
-        const h = rect.width / 2;
-        const v = rect.height / 2;
-        const x = e.clientX - rect.left - h;
-        const y = e.clientY - rect.top - v;
-        el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-      });
-      el.addEventListener('mouseleave', () => {
-        el.style.transform = `translate(0px, 0px)`;
-        el.style.transition = `transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)`;
-      });
-      el.addEventListener('mouseenter', () => {
-        el.style.transition = `none`;
-      });
-    });
-
-    // ── Lenis Smooth Scroll Initialization ──
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
-      mouseMultiplier: 1,
-      smoothTouch: false,
-      touchMultiplier: 2,
-      infinite: false,
-    });
-
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    // Handle anchor links with Lenis
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          e.preventDefault();
-          lenis.scrollTo(targetElement, {
-            offset: -100, // Accounts for the navigation header
-            duration: 1.5,
-          });
-          history.pushState(null, null, targetId);
-        }
-      });
-    });
-  </script>
-</body>
+    <h2>Where I've worked</h2>
+    <ul>
+      <li>
+        <strong><a target="_blank" rel="noopener noreferrer" href="https://sportefypakistan.com">Sportefy</a></strong> — Founding Backend Developer.
+        Built the entire core backend architecture from 0&rarr;1 using NestJS
+        and TypeScript.
+      </li>
+      <li>
+        <strong><a target="_blank" rel="noopener noreferrer" href="https://slidey.io">Slidey LLC</a></strong> — Full-Stack Web Developer.
+        Developed RAG-powered internal tooling and managed serverless deployment
+        lifecycles on Azure.
+      </li>
+    </ul>
+  </body>
 </html>

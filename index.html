@@ -93,9 +93,12 @@
         pipelines, and complex automation layers using LangGraph and Gemini.
       </li>
       <li>
-        <strong><a target="_blank" rel="noopener noreferrer" href="https://github.com/usman-faisal/tcp-loadbalancer">TCP Load Balancer</a></strong> — A least-connections
-        TCP load balancer built from scratch in Go, backed by a custom min-heap
-        for O(log n) backend selection.
+        <strong><a target="_blank" rel="noopener noreferrer" href="https://github.com/usman-faisal/tcp-loadbalancer">TCP Load Balancer</a></strong> — A Layer 4
+        load balancer built from scratch in Go, supporting round-robin and
+        least-connections scheduling with a custom min-heap for O(log n)
+        backend selection. Handles concurrent connections safely with
+        goroutines and mutex-guarded state, and includes live backend health
+        checks with automatic failover.
       </li>
       <li>
         <strong><a target="_blank" rel="noopener noreferrer" href="https://github.com/ProDanish203/Ligma-DevsDay-26">LIGMA</a></strong> — A real-time collaborative
